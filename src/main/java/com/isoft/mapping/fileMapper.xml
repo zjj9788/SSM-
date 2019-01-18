@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--动态sql-->
+<mapper namespace="com.isoft.mapping.File">
+   <select id="findUseFile" parameterType="map"  resultType="map">
+       select * from file_inf
+        <where>
+            <if test="file_upload_user!=null">
+                file_upload_user_id=#{file_upload_user}
+            </if>
+        </where>
+        <if test="page!=null and limit!=null">
+            limit #{page},#{limit}
+        </if>
+    </select>
+    <select id="findRSCount" parameterType="map" resultType="map">
+        select count(*) as `count` from file_inf
+        <where>
+            <if test="file_upload_user!=null">
+                file_upload_user_id=#{file_upload_user}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateFileName" parameterType="map" >
+        update file_inf set file_name=#{file_name} where file_id=#{file_id}
+    </update>
+    <delete id="deleteFileById" parameterType="map">
+        delete from file_inf where file_id=#{file_id}
+    </delete>
+</mapper>

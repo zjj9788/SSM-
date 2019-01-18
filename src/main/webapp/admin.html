@@ -8,22 +8,56 @@
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
     <script type="text/javascript">
+        var temp=0
+        $(function () {
+            var uname=sessionStorage.getItem("uname")
+            var str="<div  align=\"center\">欢迎<label style='color: red'>"+uname+"</label>登录系统</div>";
+            $("#loginUserName").html(uname);
+            if(temp==0)
+            logintip(str);
+
+            $("#mainContent").load("fileManager.html");
+        });
+        function logintip(str) {
+            temp++;
+            layer.open({
+                type: 0,
+                content: str,
+                offset:'rb',
+                time:3000,
+                closeBtn:1,
+                shade:false,
+                anim:2,
+                isOutAnim:true,
+                btn:['知道了'],
+                yes:function (index,layo) {
+                    if(index==1)
+                       layer.msg("谢谢");
+                }
+
+            });
+        }
+        function fileManager(){
+            $("#mainContent").load("fileManager.html");
+        }
         function personCenter() {
             $("#mainContent").load("personCenter.html");
+        }
+        function about(){
+            $("#mainContent").load("about.html");
         }
     </script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">网络云盘</div>
+        <div class="layui-logo">融创软通网络云盘客户端</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="">控制台</a></li>
-            <li class="layui-nav-item"><a href="">商品管理</a></li>
-            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item"><a href="javascript:fileManager()">文件管理</a></li>
+            <li class="layui-nav-item"><a href="javascript:about()">关于我们</a></li>
             <li class="layui-nav-item">
-                <a href="javascript:;">其它系统</a>
+                <a href="javascript:;">消息管理</a>
                 <dl class="layui-nav-child">
                     <dd><a href="">邮件管理</a></dd>
                     <dd><a href="">消息管理</a></dd>
@@ -35,14 +69,14 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    贤心
+                    <span id="loginUserName"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">退出</a></li>
+            <li class="layui-nav-item"><a href="index.html">退出</a></li>
         </ul>
     </div>
 
@@ -51,36 +85,46 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:">用户管理</a>
+                    <a class="" href="javascript:"><span class="layui-icon layui-icon-file"></span> 我的文件</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:personCenter();">个人中心</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
+                        <dd><a href="javascript:personCenter();"><span class="layui-icon layui-icon-video"></span>视频</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-headset"></span>音乐</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href=""><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">解决方案</a>
+                    <a href="javascript:;"><span class="layui-icon layui-icon-share"></span> 资源共享</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
-                        <dd><a href="">超链接</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-video"></span> 视频</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-headset"></span>  音乐</a></dd>
+                        <dd><a href=""><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href=""><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">云市场</a></li>
-                <li class="layui-nav-item"><a href="">发布商品</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span class="layui-icon layui-icon-top"></span> 资源统计</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
+                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-rep"></span> 报表打印</a></dd>
+
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">用户管理</a></li>
+                <li class="layui-nav-item"><a href="">退出系统</a></li>
             </ul>
         </div>
     </div>
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div id="mainContent" style="padding: 15px;">内容主体区域</div>
+       <div id="mainContent" style="padding: 15px;">内容主体区域</div>
+
     </div>
 
-    <div class="layui-footer">
+    <div class="layui-footer" align="center">
         <!-- 底部固定区域 -->
-        © 2018-2019 - 天津工业大学
+        © 2018-2019  Powered By 天津工业大学
     </div>
 </div>
 
