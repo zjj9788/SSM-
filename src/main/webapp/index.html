@@ -137,8 +137,9 @@
                 method: "post",
                 data: $("#loginForm").serialize(),
                 success: function (result) {
-                    if (result == 1) {
+                    if (result !=0) {
                         sessionStorage.setItem("uname", uname);
+                        sessionStorage.setItem("user_id", result);
                         window.location.href = "admin.html";
                     } else {
                         layer.msg("登录失败，请重试!", {

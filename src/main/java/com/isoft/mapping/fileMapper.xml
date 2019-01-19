@@ -7,8 +7,14 @@
    <select id="findUseFile" parameterType="map"  resultType="map">
        select * from file_inf
         <where>
-            <if test="file_upload_user!=null">
-                file_upload_user_id=#{file_upload_user}
+            <if test="user_id!=null">
+            and  file_upload_user_id=#{user_id}
+            </if>
+            <if test="fileType!='null'">
+              and   file_type=#{fileType}
+            </if>
+            <if test="isShare!='null'">
+               and   file_status=#{isShare}
             </if>
         </where>
         <if test="page!=null and limit!=null">
@@ -27,7 +33,19 @@
     <update id="updateFileName" parameterType="map" >
         update file_inf set file_name=#{file_name} where file_id=#{file_id}
     </update>
-    <delete id="deleteFileById" parameterType="map">
-        delete from file_inf where file_id=#{file_id}
+    <update id="updateFileStatus" parameterType="map" >
+        <if test="file_status==1">
+            update file_inf set file_status=0 where file_id=#{file_id}
+        </if>
+        <if test="file_status==0">
+            update file_inf set file_status=1 where file_id=#{file_id}
+        </if>
+    </update>
+    <delete id="deleteFileById" parameterType="java.util.List">
+        delete from file_inf where file_id in (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
     </delete>
 </mapper>

@@ -3,18 +3,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>layout 后台大布局 - Layui</title>
+    <title>网络云盘客户端-融创软通</title>
     <link rel="stylesheet" href="node_modules/layui-src/dist/css/layui.css">
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
     <script type="text/javascript">
         var temp=0
         $(function () {
-            var uname=sessionStorage.getItem("uname")
+            var uname=sessionStorage.getItem("uname");
+            var user_id=sessionStorage.getItem("user_id");
+
             var str="<div  align=\"center\">欢迎<label style='color: red'>"+uname+"</label>登录系统</div>";
             $("#loginUserName").html(uname);
             if(temp==0)
-            logintip(str);
+           // logintip(str);
 
             $("#mainContent").load("fileManager.html");
         });
@@ -37,7 +39,9 @@
 
             });
         }
-        function fileManager(){
+        function fileManager(fileType,isShare){
+            sessionStorage.setItem("fileType",fileType);
+            sessionStorage.setItem("isShare",isShare);
             $("#mainContent").load("fileManager.html");
         }
         function personCenter() {
@@ -54,7 +58,7 @@
         <div class="layui-logo">融创软通网络云盘客户端</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="javascript:fileManager()">上传文件</a></li>
+            <li class="layui-nav-item"><a href="javascript:fileManager(null,null)">上传文件</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">消息管理</a>
                 <dl class="layui-nav-child">
@@ -85,25 +89,25 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:"><span class="layui-icon layui-icon-file"></span> 我的文件</a>
+                    <a ><span class="layui-icon layui-icon-file"></span> 我的文件</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:personCenter();"><span class="layui-icon layui-icon-video"></span>视频</a></dd>
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-headset"></span>音乐</a></dd>
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
-                        <dd><a href=""><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
+                        <dd><a href="javascript:fileManager('isVideo',null);"><span class="layui-icon layui-icon-video"></span>视频</a></dd>
+                        <dd><a href="javascript:fileManager('isAudio',null);"><span class="layui-icon layui-icon-headset"></span>音乐</a></dd>
+                        <dd><a href="javascript:fileManager('isPicture',null);"><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href="javascript:fileManager('isDocument',null);"><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;"><span class="layui-icon layui-icon-share"></span> 资源共享</a>
+                    <a ><span class="layui-icon layui-icon-share"></span> 资源共享</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-video"></span> 视频</a></dd>
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-headset"></span>  音乐</a></dd>
-                        <dd><a href=""><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
-                        <dd><a href=""><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
+                        <dd><a href="javascript:fileManager('isVideo',1);"><span class="layui-icon layui-icon-video"></span> 视频</a></dd>
+                        <dd><a href="javascript:fileManager('isAudio',1);"><span class="layui-icon layui-icon-headset"></span>  音乐</a></dd>
+                        <dd><a href="javascript:fileManager('isPicture',1);"><span class="layui-icon layui-icon-picture"></span> 照片</a></dd>
+                        <dd><a href="javascript:fileManager('isDocument',1);"><span class="layui-icon layui-icon-file"></span> 文档</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;"><span class="layui-icon layui-icon-util"></span> 资源统计</a>
+                    <a ><span class="layui-icon layui-icon-util"></span> 资源统计</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
                         <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart-screen"></span> 报表打印</a></dd>
@@ -127,17 +131,5 @@
         © 2018-2019  Powered By 天津工业大学
     </div>
 </div>
-
-<script>
-    //JavaScript代码区域
-    layui.use('element', function () {
-        var element = layui.element;
-
-    });
-</script>
-</body>
-</html>
-
-
 </body>
 </html>

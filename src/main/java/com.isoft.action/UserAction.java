@@ -21,12 +21,22 @@ public class UserAction {
     @ResponseBody
     public int login(String uname,String upwd){
         Map<String, Object> login = userServiceImpl.login(uname, upwd);
+      //  System.out.println(uname+","+upwd+","+login);
+        if(login==null)
+            return 0;
+        else
+            return Integer.parseInt(login.get("user_id").toString());
+    }
+/*    @RequestMapping(value = "/findUserIdByUname.do",method = RequestMethod.POST)
+    @ResponseBody
+    public int login(String uname){
+        Map<String, Object> login = userServiceImpl.login(uname, upwd);
         System.out.println(uname+","+upwd+","+login);
         if(login==null)
             return 0;
         else
             return 1;
-    }
+    }*/
     @RequestMapping(value = "/register.do",method = RequestMethod.POST)
     @ResponseBody
     public int register(String uname,String upwd,String email){

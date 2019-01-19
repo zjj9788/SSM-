@@ -12,8 +12,8 @@ public class FileServiceImpl implements IFileService {
     @Autowired
     IFileDAO fileDAOImpl;
     @Override
-    public List<Map<String, Object>> fileUserFile(int file_upload_user,int page,int limit) {
-        return fileDAOImpl.fileUserFile(file_upload_user,page,limit);
+    public List<Map<String, Object>> fileUserFile(Map map) {
+        return fileDAOImpl.fileUserFile(map);
     }
 
     @Override
@@ -24,5 +24,10 @@ public class FileServiceImpl implements IFileService {
     @Override
     public int deleteFileById(List<String> list) {
         return fileDAOImpl.deleteFileById(list);
+    }
+
+    @Override
+    public int updateFileStatus(Map map) {
+        return fileDAOImpl.updateFileStatus(map);
     }
 }

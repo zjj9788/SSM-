@@ -16,18 +16,21 @@ public class FileDAOImpl implements IFileDAO {
     SqlSessionFactory sqlSessionFactoryBean;
 
     @Override
-    public List<Map<String, Object>> fileUserFile(int file_upload_user, int page, int limit) {
+    public List<Map<String, Object>> fileUserFile(Map map) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession();
         String sql = "com.isoft.mapping.File.findUseFile";
         String sql_count = "com.isoft.mapping.File.findRSCount";
-        Map map = new HashMap();
-        map.put("file_upload_user", file_upload_user);
-        map.put("page", (page - 1) * limit);
-        map.put("limit", limit);
+        System.out.println(map+"---");
+        try{
         List<Map<String, Object>> objects = sqlSession.selectList(sql, map);
         Map<String, Object> rscount = sqlSession.selectOne(sql_count, map);
         objects.add(rscount);
         return objects;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -43,14 +46,24 @@ public class FileDAOImpl implements IFileDAO {
     public int deleteFileById(List<String> list) {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.File.deleteFileById";
-        Map map = new HashMap();
-        int i = 0;
-        for (String str : list) {
-            map.put("file_id", str);
-            i = sqlSession.update(sql, map);
+        try {
+         //   System.out.println(list);
+            int delete = sqlSession.delete(sql, list);
+           // System.out.println(delete + "条记录");
             sqlSession.commit(true);
+            return delete;
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        return 0;
+    }
 
-        return i;
+    @Override
+    public int updateFileStatus(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        System.out.println(map);
+        String sql = "com.isoft.mapping.File.updateFileStatus";
+        int update = sqlSession.update(sql, map);
+        return update;
     }
 }
