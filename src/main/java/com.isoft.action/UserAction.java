@@ -17,6 +17,18 @@ import java.util.Map;
 public class UserAction {
     @Autowired
     IUserService userServiceImpl;
+    @RequestMapping(value = "/updateOldUpwd.do",method = RequestMethod.POST)
+    @ResponseBody
+    public int updateOldUpwd(int userid,String oldpwd,String newpwd){
+      int validate=  userServiceImpl.validateOldPwd(userid,oldpwd);
+      if(validate==0){
+          return -1;
+      }else {
+          int i = userServiceImpl.updateOldPwd(userid, newpwd);
+          return i;
+      }
+
+    }
     @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
     public int login(String uname,String upwd){

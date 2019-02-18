@@ -21,4 +21,16 @@ public class UserServiceImpl implements IUserService {
         int register = userDAO.register(obj);
         return register;
     }
+
+    @Override
+    public int validateOldPwd(int userid, String oldpwd) {
+        int validate=userDAO.validateOldPwd(userid,oldpwd);
+        return validate;
+    }
+
+    @Override
+    public int updateOldPwd(int userid, String newpwd) {
+        int i = userDAO.updateOldPwd(userid, newpwd);
+        return i;
+    }
 }

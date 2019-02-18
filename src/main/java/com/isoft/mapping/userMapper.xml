@@ -10,4 +10,10 @@
     insert into user_inf(username,`password`,email,register_time,status)
     values(#{uname},#{upwd},#{email},now(),0)
 </insert>
+    <select id="validateOldPwd" parameterType="map" resultType="map">
+        select * from user_inf where user_id=#{userid} and `password`=#{oldpwd}
+    </select>
+    <update id="updateOldPwd" parameterType="map">
+        update user_inf set `password`=#{newpwd} where user_id=#{userid}
+    </update>
 </mapper>
