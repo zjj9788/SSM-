@@ -96,8 +96,8 @@
                     title: "个人文件列表",
                     where: {
                         "file_upload_user": sessionStorage.getItem("user_id"),
-                        "fileType": sessionStorage.getItem("fileType"),
-                        "isShare": sessionStorage.getItem("isShare")
+                        "fileType": sessionStorage.getItem("fileType"),//isAudio,isVideo,isDocument,isPicture
+                        "isShare": sessionStorage.getItem("isShare")//1|0  1代表共享，0代表私有
                     },
                     page: true,
                     limit: 8,
