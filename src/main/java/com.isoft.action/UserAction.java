@@ -1,5 +1,6 @@
 package com.isoft.action;
 
+import com.alibaba.fastjson.JSON;
 import com.isoft.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +33,26 @@ public class UserAction {
     }
     @RequestMapping(value = "/login.do",method = RequestMethod.POST)
     @ResponseBody
-    public int login(String uname,String upwd){
+    public Map login(String uname, String upwd, HttpSession session){
         Map<String, Object> login = userServiceImpl.login(uname, upwd);
       //  System.out.println(uname+","+upwd+","+login);
-        if(login==null)
-            return 0;
-        else
-            return Integer.parseInt(login.get("user_id").toString());
+        HashMap map=new HashMap();
+        if(login==null){
+            map.put("loginmsg",0);
+            return map;}
+        else{
+            map.put("loginmsg",1);
+            map.put("userid",login.get("user_id").toString());
+            session.setAttribute("userid",login.get("user_id").toString());
+            if(login.get("photo")!=null||login.get("photo").toString()!="")
+                map.put("photo",login.get("photo").toString());
+            //session.setAttribute("photo",login.get("photo").toString());
+            else
+              map.put("photo","myphoto/myphoto.jpg");
+              //  session.setAttribute("photo","myphoto/myphoto.jpg");
+            System.out.println(JSON.toJSONString(map));
+            return map;
+        }
     }
 /*    @RequestMapping(value = "/findUserIdByUname.do",method = RequestMethod.POST)
     @ResponseBody

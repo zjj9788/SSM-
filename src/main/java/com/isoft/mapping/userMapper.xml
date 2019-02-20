@@ -16,4 +16,7 @@
     <update id="updateOldPwd" parameterType="map">
         update user_inf set `password`=#{newpwd} where user_id=#{userid}
     </update>
+    <update id="updateUserPhoto" parameterType="map">
+        update user_inf set photo=#{photopath} where user_id=#{userid}
+    </update>
 </mapper>

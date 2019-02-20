@@ -58,4 +58,16 @@ public class UserDAOImpl implements IUserDAO {
         int update = sqlSession.update(sql, map);
         return update;
     }
+
+    @Override
+    public int updateUserPhoto(String userid, String photoPath) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.User.updateUserPhoto";
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("photopath", photoPath);
+        int update = sqlSession.update(sql, map);
+        sqlSession.commit();
+        return update;
+    }
 }

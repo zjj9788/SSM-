@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="node_modules/layui-src/dist/css/layui.css">
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
+    <script>
+        $(function () {
+            $("#demo1").attr("src",sessionStorage.getItem("photo"));
+        });
+    </script>
 </head>
 <body>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
@@ -15,68 +20,144 @@
     <div class="layui-col-md6">
         <form class="layui-form" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">真实姓名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">个人简介</label>
-                <div class="layui-input-block">
-                    <textarea name="desc" placeholder="请输入个人信息内容" class="layui-textarea"></textarea>
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input  name="username" class="layui-input" type="text"  autocomplete="off"
+                            lay-verify="title" disabled>
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-inline">
+                    <input  name="rname" class="layui-input" type="text" placeholder="请输入真实姓名" autocomplete="off"
+                           lay-verify="title">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="formDemo">确认更改</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <input name="gender" title="男" type="radio" checked="checked" value="男">
+                    <input name="gender" title="女" type="radio" value="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">出生日期</label>
+                    <div class="layui-input-inline">
+                        <input id="birthday"  name="birthday" class="layui-input" id="date" type="text" placeholder="yyyy-MM-dd"
+                               autocomplete="off" lay-verify="date">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-inline">
+                        <input name="phone" class="layui-input" type="tel" autocomplete="off"
+                               lay-verify="required|phone" placeholder="请输入联系电话">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">个人邮箱</label>
+                    <div class="layui-input-inline">
+                        <input name="email" class="layui-input" type="text" autocomplete="off" lay-verify="email"
+                               placeholder="请输入个人邮箱">
+                    </div>
+                </div>
+            </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">家庭地址</label>
+                    <div class="layui-input-block">
+                        <input name="address" class="layui-input" type="text" placeholder="请输入家庭地址" autocomplete="off"
+                               lay-verify="title">
+                    </div>
+                </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">个人简介</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" class="layui-textarea" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-filter="demo1" lay-submit="">更新信息</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
                 </div>
             </div>
         </form>
+
     </div>
     <div class="layui-col-md3">
-        <div class="layui-upload layui-col-lg-offset2">
-            <button type="button" class="layui-btn" id="test1">上传图片</button>
+        <div class="layui-upload layui-col-lg-offset2" align="center">
             <div class="layui-upload-list">
                 <img class="layui-upload-img" id="demo1" src="myphoto/myphoto.jpg" style="width: 50%">
                 <p id="demoText"></p>
             </div>
+            <button type="button" class="layui-btn" id="test1">更换头像</button>
         </div>
     </div>
 </div>
 <script>
-    layui.use('upload', function(){
+    layui.use('upload', function () {
         var $ = layui.jquery
-            ,upload = layui.upload;
+            , upload = layui.upload;
 
         //普通图片上传
         var uploadInst = upload.render({
             elem: '#test1'
-            ,url: 'file/uploadPersonPhoto.do'
-            ,before: function(obj){
+            , url: 'file/uploadPersonPhoto.do'
+            , before: function (obj) {
                 //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
+                obj.preview(function (index, file, result) {
                     $('#demo1').attr('src', result); //图片链接（base64）
                 });
             }
-            ,done: function(res){
-                //如果上传失败
-                if(res.code > 0){
-                    return layer.msg('上传失败');
+            , done: function (res) {
+
+               if (res.code ==1) {
+                    return layer.msg('文件上传失败');
+                }
+                if (res.code ==2) {
+                    return layer.msg('文件类型错误');
+                }
+                if (res.code ==3) {
+                    return layer.msg('头像路径存储不成功');
+                }
+                if (res.code ==4) {
+                    return layer.msg('没选择文件');
+                }
+                if (res.code ==0) {
+                    parent.document.getElementById("userPhoto").src=res.photo;
+                    return layer.msg('头像上传成功');
                 }
                 //上传成功
             }
-            ,error: function(){
+            , error: function () {
                 //演示失败状态，并实现重传
                 var demoText = $('#demoText');
                 demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function(){
+                demoText.find('.demo-reload').on('click', function () {
                     uploadInst.upload();
                 });
             }
         });
     });
+
+
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#birthday'
+        });
+    });
+
 </script>
 
 </body>

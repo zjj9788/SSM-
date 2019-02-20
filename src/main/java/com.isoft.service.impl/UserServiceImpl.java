@@ -33,4 +33,10 @@ public class UserServiceImpl implements IUserService {
         int i = userDAO.updateOldPwd(userid, newpwd);
         return i;
     }
+
+    @Override
+    public int updateUserPhoto(String userid, String photoPath) {
+        int i = userDAO.updateUserPhoto(userid, photoPath);
+        return i;
+    }
 }

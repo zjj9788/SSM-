@@ -7,4 +7,5 @@ public interface IUserService {
     int register(Map<String, Object> obj);
     int validateOldPwd(int userid,String oldpwd);
     int updateOldPwd(int userid,String newpwd);
+    int updateUserPhoto(String userid,String photoPath);
 }

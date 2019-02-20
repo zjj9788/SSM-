@@ -9,13 +9,8 @@
     <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
     <script>
         function changeFileStatus(file_status,file_id) {
-           alert(file_id+","+file_status);
-                /*
-                         layer.confirm('是否共享文件？', {
-                            btn: ['是', '否'],
-                            btnAlign: 'c'//按钮
-                        }, function () {*/
-            $.ajax({
+            alert(file_status,file_id);
+  /*            $.ajax({
                 url: "file/updateFileStatus.do",
                 method: "post",
                 data: {
@@ -30,12 +25,8 @@
                 }, error: function () {
                     layer.msg('请求服务器失败！', {icon: 2});
                 }
-            });
-            /*        },function () {
-                         layer.msg("checkbox还原");
-                         }
+            });*/
 
-                     );*/
         }
 
         function deleteFileInfoById(file_id) {
@@ -67,7 +58,7 @@
         }
 
         $(function () {
-            getUserFile();
+            getUserFile(1,10);
             // alert( sessionStorage.getItem("user_id"));
             layui.table.on("edit(filetable)", function (rs) {
                 $.ajax({
@@ -88,7 +79,7 @@
         });
 
         // 获取用户文件列表
-        function getUserFile() {
+        function getUserFile(page,pagesize) {
             layui.use("table", function () {
                 layui.table.render({
                     elem: "#file_manager_table",
@@ -100,11 +91,11 @@
                         "isShare": sessionStorage.getItem("isShare")//1|0  1代表共享，0代表私有
                     },
                     page: true,
-                    limit: 8,
+                  //  limit: pagesize,
                     id: "id",//自己起名
                     size: "md",
                     toolbar: '#tbl_toolbar',
-                    limits: [10, 20, 50],
+                    limits: [10, 20, 50,100],
                     loading: true,
                     even: true,
                     cols: [[
@@ -112,7 +103,20 @@
                         {field: "file_name", title: "文件名", edit: "text", totalRow: true},
                         {
                             field: "file_type", title: "文件类型",
-                            templet: "#selectTool"
+                            templet: function (row) {
+                                if(row.file_type=="isVideo"){
+                                    return "<span class='layui-icon layui-icon-video'></span> 视频";
+                                }
+                                if(row.file_type=="isAudio"){
+                                    return "<span class='layui-icon layui-icon-speaker'></span> 音频";
+                                }
+                                if(row.file_type=="isPicture"){
+                                    return "<span class='layui-icon layui-icon-picture'></span> 图片";
+                                }
+                                if(row.file_type=="isDocument"){
+                                    return "<span class='layui-icon layui-icon-file'></span> 文档";
+                                }
+                            }
                             /*function (row) {
                                 if (row.file_type == ".jpg" || row.file_type == ".png" || row.file_type == ".gif")
                                     return "<span style='color: blue' class='layui-icon layui-icon-picture'></span>图片";
@@ -127,7 +131,7 @@
                         {
                             field: "file_size", title: "大小", sort: true,
                             templet: function (row) {
-                                return (row.file_size / 1024) + "KB";
+                                return (row.file_size) + "KB";
                             }
                         },
                         {
@@ -175,7 +179,7 @@
                         $.each(tableselectdate, function (index, row, rs) {
                             arr[index] = row.file_id;
                         });
-                        alert(JSON.stringify(arr));
+                       // alert(JSON.stringify(arr));
                         if (arr.length == 0) {
                             layer.msg("请选择一行数据");
                         } else {
@@ -228,7 +232,6 @@
     <button type="button" class="layui-btn" id="test6"><i class="layui-icon"></i>上传音频</button>
     <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传图片</button>
     <button type="button" class="layui-btn" id="test7"><i class="layui-icon"></i>上传文档</button>
-    <button type="button" class="layui-btn layui-btn-primary" id="test4"><i class="layui-icon"></i>上传压缩文件</button>
     <button class="layui-btn" lay-event="delete">
         <i class="layui-icon">&#xe640;</i> 删除
     </button>

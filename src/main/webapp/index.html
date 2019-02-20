@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>云盘登录</title>
-    <link rel="stylesheet" href="node_modules/layui-src/dist/css/layui.css"/>
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
+    <link rel="stylesheet" href="node_modules/layui-src/dist/css/layui.css">
+
 
     <script>
         function registerValidate() {
@@ -138,9 +137,12 @@
                 method: "post",
                 data: $("#loginForm").serialize(),
                 success: function (result) {
-                    if (result != 0) {
+                  var jsonObj=  JSON.parse(result);
+                   // alert(jsonObj.photo);
+                    if (result.loginmsg != 0) {
                         sessionStorage.setItem("uname", uname);
-                        sessionStorage.setItem("user_id", result);
+                        sessionStorage.setItem("user_id", jsonObj.userid);
+                        sessionStorage.setItem("photo", jsonObj.photo);
                         window.location.href = "admin.html";
                     } else {
                         layer.msg("登录失败，请重试!", {
@@ -163,22 +165,17 @@
 
         }
 
-        /*设置登录窗口垂直居中*/
-        $(function () {
-            var height = document.body.scrollHeight;
-            var logo_wrap = $("#loginDiv").get(0);
-            var margin_top = (height - 150) / 2;
-            logo_wrap.style.marginTop = margin_top + "px";
-
-
-        });
 
     </script>
 </head>
 <body class="layui-bg-gray">
 <div id="loginDiv" class="layui-fluid" style="width: 40%" align="center">
     <div class="layui-card">
-        <div class="layui-card-header"><h3>融创软通网络云盘</h3></div>
+        <div class="layui-card-header">
+            <!--  <h3>融创软通网络云盘</h3>-->
+            <img src="images/logo.png" alt="login" style="width: 40%;"/>
+        </div>
+
         <div class="layui-card-body">
             <div class="layui-tab layui-tab-brief">
                 <ul class="layui-tab-title">
@@ -217,7 +214,12 @@
                                     <canvas width="100" height="35" id="verifyCanvas"></canvas>
                                     <img id="img_vcode" alt="4位验证码"></a>
                             </div>
-
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="checkbox" name="remember" title="记住密码" checked="checked">
+                                    <a href="">忘记密码,找回？</a>
+                                </div>
+                            </div>
                             <div class="layui-form-item" align="center">
                                 <a href="javascript:loginValidate()"
                                    class="layui-btn layui-btn-lg layui-btn-normal">登录</a>
@@ -287,11 +289,13 @@
 </div>
 <div class="layui-footer" align="center">
     <br>
-    <address>&copy; 2018-2019 天津工业大学</address>
+    &copy;  2018-2019 融创软通科技股份 Copy Right
 </div>
 
 </body>
 </html>
+<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
 <!--<script type="text/javascript" src="js/vcode/vcode.js"></script>-->
 <script type="text/javascript">
     var nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
@@ -369,4 +373,13 @@
     $(function () {
         resetCode();
     });
+
+    /*设置登录窗口垂直居中*/
+    $(function () {
+        var height = document.body.scrollHeight;
+        var logo_wrap = $("#loginDiv").get(0);
+        var margin_top = (height - 150) / 2;
+        logo_wrap.style.marginTop = margin_top + "px";
+    });
 </script>
+

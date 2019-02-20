@@ -9,4 +9,5 @@ public interface IUserDAO {
 
     public int validateOldPwd(int userid, String oldpwd);
     public int updateOldPwd(int userid, String newpwd);
+    public int updateUserPhoto(String userid,String photoPath);
 }
