@@ -20,7 +20,7 @@ public class FileAction {
 
     @RequestMapping(value = "findUserFile.do", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> findUserFile(int file_upload_user, String fileType, String isShare, int page, int limit) {//根据用户信息查询
+    public Map<String, Object> findUserFile(int file_upload_user, String fileType, int isShare, int page, int limit) {//根据用户信息查询
         Map map = new HashMap();
         map.put("user_id", file_upload_user);
         map.put("fileType", fileType);
