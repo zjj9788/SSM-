@@ -47,7 +47,6 @@ public class FileAction {
     @ResponseBody
     public int updateFileName(String obj) {
         Map map = (Map) JSON.parse(obj);
-        System.out.println(map + "---");
         int i = fileServiceImpl.updateFileName(map);
         return i;
     }

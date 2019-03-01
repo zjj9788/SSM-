@@ -8,4 +8,6 @@ public interface IFileDAO {
     int updateFileName(Map map);
     int deleteFileById(List<String> id);
     int updateFileStatus(Map map);
+    int updateDownloadCount(int file_id);
+    int insertUploadFileInfo(Map map);
 }

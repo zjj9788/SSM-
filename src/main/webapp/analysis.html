@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据分析</title>
+    <link rel="stylesheet" href="design/css/layui.css">
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="node_modules/echarts/dist/echarts.min.js"></script>
+    <script type="text/javascript" src="design/layui.all.js"></script>
+    <script>
+
+      function showBar() {
+          $.get("user/userAnalysis.do",function (data,status) {
+              var jsonObj=JSON.parse(data);
+              var mychart=echarts.init(document.getElementById("bar"));
+              var option = {
+                  title: {
+                      text: '统计用户状态'
+                  },
+                  tooltip: {},
+                  legend: {
+                      data:['激活用户数量']
+                  },
+                  xAxis: {
+                      data: jsonObj.status
+                  },
+                  yAxis: {},
+                  series: [{
+                      name: '销量',
+                      type: 'pie',
+                      data: jsonObj.count
+                  }]
+              };
+              mychart.setOption(option);
+          });
+
+      }
+
+      function showTree() {
+          $.get("dir/dirAnalysis.do",{"user_id":sessionStorage.getItem("user_id")},function (data,status) {
+              var jsonObj=JSON.parse(data);
+              var mychart=echarts.init(document.getElementById("tree"));
+              option = {
+                  tooltip: {
+                      trigger: 'item',
+                      triggerOn: 'mousemove'
+                  },
+                  series: [
+                      {
+                          type: 'tree',
+
+                          data: [jsonObj],
+
+                          top: '1%',
+                          left: '7%',
+                          bottom: '1%',
+                          right: '20%',
+
+                          symbolSize: 7,
+
+                          label: {
+                              normal: {
+                                  position: 'left',
+                                  verticalAlign: 'middle',
+                                  align: 'right',
+                                  fontSize: 9
+                              }
+                          },
+
+                          leaves: {
+                              label: {
+                                  normal: {
+                                      position: 'right',
+                                      verticalAlign: 'middle',
+                                      align: 'left'
+                                  }
+                              }
+                          },
+
+                          expandAndCollapse: true,
+                          animationDuration: 550,
+                          animationDurationUpdate: 750
+                      }
+                  ]
+              };
+              mychart.setOption(option);
+          });
+
+      }
+      $(function () {
+         showTree();
+      });
+    </script>
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-quote-nm">
+    统计图表
+</blockquote>
+<div class="layui-tab layui-tab-card" style="width: 100%">
+    <ul class="layui-tab-title">
+        <li onclick="showBar()">柱状图</li>
+        <li onclick="showTree()" class="layui-this">目录树图</li>
+        <li>折线图</li>
+        <li>雷达图</li>
+        <li>饼状图</li>
+    </ul>
+<div class="layui-tab-content">
+    <div class="layui-tab-item">
+        <div id="bar" style="width: 100%;height: 500px">
+
+        </div>
+    </div>
+    <div class="layui-tab-item layui-show">
+        <div id="tree" style="width: 100%;height: 500px">
+
+    </div></div>
+    <div class="layui-tab-item">ccc</div>
+    <div class="layui-tab-item">ddd</div>
+    <div class="layui-tab-item">ddd</div>
+</div>
+</div>
+</body>
+</html>

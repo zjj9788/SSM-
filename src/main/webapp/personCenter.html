@@ -7,8 +7,72 @@
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
     <script>
+        function updateUserInfo() {
+            var user_id = sessionStorage.getItem("user_id");
+            $.ajax({
+                url: "user/updateInfo.do?user_id=" + user_id,
+                method: "post",
+                data: $("#updateUserForm").serialize(),
+                success: function (result) {
+                    if (result > 0)
+                        layer.msg("更新个人信息成功!", {
+                            time: 2000
+                        });
+                    else
+                        layer.msg("更新个人信息失败!", {
+                            time: 2000
+                        });
+                },
+                error: function () {
+                    layer.msg("请求服务器失败!", {
+                        time: 2000
+                    });
+                }
+            });
+        }
+
         $(function () {
-            $("#demo1").attr("src",sessionStorage.getItem("photo"));
+             $("#demo1").attr("src",sessionStorage.getItem("photo"));
+            parent.$("#userPhoto").attr("src",sessionStorage.getItem("photo"));
+            var user_id = sessionStorage.getItem("user_id");
+            $.ajax({
+                url: "user/findUserInfoById.do",
+                method: "get",
+                data: {"userid": user_id},
+                success: function (result) {
+                   // alert(result);
+                    var jsonObj = JSON.parse(result);//将json字符串转化为JSON对象
+                  //  alert(jsonObj.photo+"aaa");
+                    if (jsonObj.photo!= null)
+                        $("#demo1").attr("src", jsonObj.photo);
+                    $("#username").val(jsonObj.username);
+                    $("#rname").val(jsonObj.runame);
+                    $("#birthday").val(jsonObj.birthday);
+                    $("#phone").val(jsonObj.telephone);
+                    $("#address").val(jsonObj.address);
+                    $("#remark").val(jsonObj.remark);
+                    //性别
+                    var gender = jsonObj.gender;
+                    if (gender == '男') {
+                        $("input[name='gender'][value='男']").prop("checked", true);
+                    }
+                    if (gender == '女') {
+                        $("input[name='gender'][value='女']").prop("checked", true);
+                    }
+                   //要想设置性别需要更新渲染
+                    layui.use(['form'], function () {
+                        var form = layui.form;
+                        form.render();  //更新渲染
+
+                    });
+
+                },
+                error: function () {
+                    layer.msg("请求服务器失败!", {
+                        time: 2000
+                    });
+                }
+            });
         });
     </script>
 </head>
@@ -18,33 +82,37 @@
 </fieldset>
 <div class="layui-row">
     <div class="layui-col-md6">
-        <form class="layui-form" action="">
+
+        <form id="updateUserForm" class="layui-form" >
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
-                    <input  name="username" class="layui-input" type="text"  autocomplete="off"
-                            lay-verify="title" disabled>
+                    <input id="username" name="username" class="layui-input" type="text" autocomplete="off"
+                           lay-verify="title" disabled>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">真实姓名</label>
                 <div class="layui-input-inline">
-                    <input  name="rname" class="layui-input" type="text" placeholder="请输入真实姓名" autocomplete="off"
+                    <input id="rname" name="runame" class="layui-input" type="text" placeholder="请输入真实姓名"
+                           autocomplete="off"
                            lay-verify="title">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-block">
-                    <input name="gender" title="男" type="radio" checked="checked" value="男">
-                    <input name="gender" title="女" type="radio" value="女">
+                    <input id="man" name="gender" title="男" type="radio" value="男" lay-skin="primary"/>
+                    <input id="woman" name="gender" title="女" type="radio" value="女" checked="checked"
+                           lay-skin="primary"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">出生日期</label>
                     <div class="layui-input-inline">
-                        <input id="birthday"  name="birthday" class="layui-input" id="date" type="text" placeholder="yyyy-MM-dd"
+                        <input id="birthday" name="birthday" class="layui-input" id="date" type="text"
+                               placeholder="yyyy-MM-dd"
                                autocomplete="off" lay-verify="date">
                     </div>
                 </div>
@@ -53,37 +121,39 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">联系电话</label>
                     <div class="layui-input-inline">
-                        <input name="phone" class="layui-input" type="tel" autocomplete="off"
-                               lay-verify="required|phone" placeholder="请输入联系电话">
+                        <input id="phone" name="telephone" class="layui-input" type="tel" autocomplete="off"
+                               placeholder="请输入联系电话">
                     </div>
                 </div>
 
-                <div class="layui-inline">
+                <!--<div class="layui-inline">
                     <label class="layui-form-label">个人邮箱</label>
                     <div class="layui-input-inline">
-                        <input name="email" class="layui-input" type="text" autocomplete="off" lay-verify="email"
+                        <input id="email" name="email" class="layui-input" type="text" autocomplete="off"
+                               lay-verify="email"
                                placeholder="请输入个人邮箱">
                     </div>
-                </div>
+                </div>-->
             </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">家庭地址</label>
-                    <div class="layui-input-block">
-                        <input name="address" class="layui-input" type="text" placeholder="请输入家庭地址" autocomplete="off"
-                               lay-verify="title">
-                    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">家庭地址</label>
+                <div class="layui-input-block">
+                    <input id="address" name="address" class="layui-input" type="text" placeholder="请输入家庭地址"
+                           autocomplete="off"
+                           lay-verify="title">
                 </div>
+            </div>
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">个人简介</label>
                 <div class="layui-input-block">
-                    <textarea name="remark" class="layui-textarea" placeholder="请输入内容"></textarea>
+                    <textarea id="remark" name="remark" class="layui-textarea" placeholder="请输入内容"></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-filter="demo1" lay-submit="">更新信息</button>
+                    <a href="javascript:updateUserInfo()" class="layui-btn">更新信息</a>
                     <button class="layui-btn layui-btn-primary" type="reset">重置</button>
                 </div>
             </div>
@@ -117,20 +187,21 @@
             }
             , done: function (res) {
 
-               if (res.code ==1) {
+                if (res.code == 1) {
                     return layer.msg('文件上传失败');
                 }
-                if (res.code ==2) {
+                if (res.code == 2) {
                     return layer.msg('文件类型错误');
                 }
-                if (res.code ==3) {
+                if (res.code == 3) {
                     return layer.msg('头像路径存储不成功');
                 }
-                if (res.code ==4) {
+                if (res.code == 4) {
                     return layer.msg('没选择文件');
                 }
-                if (res.code ==0) {
-                    parent.document.getElementById("userPhoto").src=res.photo;
+                if (res.code == 0) {
+                    sessionStorage.setItem("photo",res.photo);
+                    parent.document.getElementById("userPhoto").src = res.photo;
                     return layer.msg('头像上传成功');
                 }
                 //上传成功
@@ -147,10 +218,10 @@
     });
 
 
-    layui.use(['form', 'layedit', 'laydate'], function(){
+    layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
-            ,layer = layui.layer
-            ,laydate = layui.laydate;
+            , layer = layui.layer
+            , laydate = layui.laydate;
 
         //日期
         laydate.render({

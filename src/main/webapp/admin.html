@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>网络云盘客户端-融创软通</title>
-    <link rel="stylesheet" href="node_modules/layui-src/dist/css/layui.css">
+    <link rel="stylesheet" href="design/css/layui.css">
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="node_modules/layui-src/dist/layui.all.js"></script>
+    <script type="text/javascript" src="design/layui.all.js"></script>
     <script type="text/javascript">
         var temp = 0
         $(function () {
             var uname = sessionStorage.getItem("uname");
             var user_id = sessionStorage.getItem("user_id");
             var photo = sessionStorage.getItem("photo");
-        //    alert(photo);
-            $("#userPhoto").attr("src",photo);//这句话是给img标记src属性赋值
+            //    alert(photo);
+            $("#userPhoto").attr("src", photo);//这句话是给img标记src属性赋值
             var str = "<div  align=\"center\">欢迎<label style='color: red'>" + uname + "</label>登录系统</div>";
             $("#loginUserName").html(uname);
             if (temp == 0)
@@ -61,6 +61,10 @@
             $("#mainContent").load("updateUpwd.html");
         }
 
+        function newDirection() {
+            $("#mainContent").load("newDirection.html");
+        }
+
         function exit() {
             layer.confirm("确认要真的退出系统么？", {title: "确认提示", btn: ['残忍离开', '继续使用']}, function (index) {
                 sessionStorage.clear();//销毁所有session存储
@@ -69,6 +73,28 @@
 
 
         }
+
+        function showUploadSelectFile() {
+            $("#mainContent").load("uploadSelectFile.html");
+        }
+
+        function showAnalysis() {
+            $("#mainContent").load("analysis.html");
+        }
+
+        function showUploadDiv() {
+            layer.open({
+                type: 2,
+                title: "上传文件",
+                area: ['800px', '400px'],
+                content: "uploadSelectFile.html",
+                btn: ["关闭"],
+                btn1: function () {
+                    layer.closeAll();
+                }
+            });
+        }
+
     </script>
 </head>
 <body class="layui-layout-body">
@@ -80,7 +106,7 @@
         </div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="javascript:fileManager(null,null)">上传文件 </a></li>
+            <li class="layui-nav-item"><a href="javascript:fileManager(null,null)">全部文件 </a></li>
             <!--        <li class="layui-nav-item">
                         <a href="javascript:;">消息管理</a>
                         <dl class="layui-nav-child">
@@ -89,7 +115,18 @@
                             <dd><a href="">授权管理</a></dd>
                         </dl>
                     </li>-->
-            <li class="layui-nav-item"><a href="javascript:about()">关于我们 </a></li>
+            <li class="layui-nav-item">
+                <button class="layui-btn layui-btn-danger" onclick="showUploadDiv()">
+                    <i class="layui-icon layui-icon-upload-drag"></i> 上传文件
+                </button>
+            </li>
+            <li class="layui-nav-item">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li class="layui-nav-item">
+                <button class="layui-btn layui-btn-warm" onclick="newDirection()">
+                    <i class="layui-icon layui-icon-carousel"></i> 新建文件夹
+                </button>
+            </li>
+
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
@@ -101,6 +138,9 @@
                     <dd><a href="javascript:personCenter()"><span class="layui-icon layui-icon-user"></span> 完善个人信息</a>
                     </dd>
                     <dd><a href="javaScript:redirectUpdateUpwd()"><span class="layui-icon layui-icon-util"></span> 修改密码</a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:about()"><span class="layui-icon layui-icon-about"></span> 关于我们</a>
                     </dd>
                 </dl>
             </li>
@@ -142,7 +182,8 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="#"><span class="layui-icon layui-icon-util"></span> 个人资源统计</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart"></span> 统计分析</a></dd>
+                        <dd><a href="javascript:showAnalysis()"><span class="layui-icon layui-icon-chart"></span>
+                            统计分析</a></dd>
                         <dd><a href="javascript:;"><span class="layui-icon layui-icon-chart-screen"></span> 报表打印</a>
                         </dd>
 

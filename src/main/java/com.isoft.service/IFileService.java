@@ -11,4 +11,9 @@ public interface IFileService {
     int deleteFileById(List<String> list);
 
     int updateFileStatus(Map map);
+
+    int updateDownloadCount(int file_id);
+
+    int insertUploadFileInfo(Map map);
+
 }

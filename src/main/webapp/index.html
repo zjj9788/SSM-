@@ -8,6 +8,7 @@
 
 
     <script>
+
         function registerValidate() {
             var uname = $("#re_uname").val();
             if (uname.length == 0) {
@@ -131,19 +132,39 @@
                 });
                 return;
             }
-            //  console.info($("#loginForm").serialize());
+            // alert($("#loginForm").serialize());
             $.ajax({
                 url: "user/login.do",
                 method: "post",
                 data: $("#loginForm").serialize(),
                 success: function (result) {
-                  var jsonObj=  JSON.parse(result);
-                   // alert(jsonObj.photo);
-                    if (result.loginmsg != 0) {
-                        sessionStorage.setItem("uname", uname);
-                        sessionStorage.setItem("user_id", jsonObj.userid);
-                        sessionStorage.setItem("photo", jsonObj.photo);
-                        window.location.href = "admin.html";
+                 //   alert(result);
+                    var jsonObj = JSON.parse(result);
+                    if (jsonObj.loginmsg != 0) {
+                        //记住密码功能
+                        if($("#rememberpwd").is(":checked")){//使用jquery获取复选框状态
+                            sessionStorage.setItem("uname", uname);
+                            sessionStorage.setItem("upwd", upwd);
+                        }else
+                        {
+                          sessionStorage.clear();
+                        }
+
+                        if (jsonObj.status == 0) {
+                            layer.msg("用户未激活，请联系管理员!", {
+                                time: 2000
+                            });
+                        } else {
+                            sessionStorage.setItem("uname", uname);
+                            sessionStorage.setItem("user_id", jsonObj.userid);
+                            sessionStorage.setItem("photo", jsonObj.photo);
+                         //  window.location.href = "admin.html";
+                            if (jsonObj.username == "admin") {
+                                alert("请跳转到管理页面！");
+                            } else {
+                                window.location.href = "admin.html";
+                            }
+                        }
                     } else {
                         layer.msg("登录失败，请重试!", {
                             time: 2000
@@ -152,14 +173,6 @@
                 },
                 error: function () {
                     layer.alert("连接服务器未成功!", {icon: 6});
-                    /*var a=layer.open({
-                        type: 2,
-                        area: ['30%','150px'],
-                        title: '消息提示',
-                        shadeClose: true,
-                        content:[null,"服务器未连接"]
-                    });
-*/
                 }
             });
 
@@ -173,7 +186,7 @@
     <div class="layui-card">
         <div class="layui-card-header">
             <!--  <h3>融创软通网络云盘</h3>-->
-            <img src="images/logo.png" alt="login" style="width: 40%;"/>
+            <img src="images/logo.jpg" alt="login" style="width: 40%;"/>
         </div>
 
         <div class="layui-card-body">
@@ -216,7 +229,7 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-input-block">
-                                    <input type="checkbox" name="remember" title="记住密码" checked="checked">
+                                    <input id="rememberpwd" type="checkbox" name="remember" title="记住密码" >
                                     <a href="">忘记密码,找回？</a>
                                 </div>
                             </div>
@@ -289,7 +302,7 @@
 </div>
 <div class="layui-footer" align="center">
     <br>
-    &copy;  2018-2019 融创软通科技股份 Copy Right
+    &copy; 2018-2019 融创软通科技股份 Copy Right
 </div>
 
 </body>
@@ -380,6 +393,15 @@
         var logo_wrap = $("#loginDiv").get(0);
         var margin_top = (height - 150) / 2;
         logo_wrap.style.marginTop = margin_top + "px";
+    });
+    $(function () {
+
+        if(sessionStorage.getItem("uname")!="null"){
+            $("#uname").val(sessionStorage.getItem("uname"));
+        }
+        if(sessionStorage.getItem("upwd")!="null"){
+            $("#upwd").val(sessionStorage.getItem("upwd"));
+        }
     });
 </script>
 

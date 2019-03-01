@@ -1,10 +1,12 @@
 package com.isoft.service.impl;
 
 import com.isoft.dao.IUserDAO;
+import com.isoft.pojo.UserInfo;
 import com.isoft.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 @Service
 public class UserServiceImpl implements IUserService {
@@ -38,5 +40,23 @@ public class UserServiceImpl implements IUserService {
     public int updateUserPhoto(String userid, String photoPath) {
         int i = userDAO.updateUserPhoto(userid, photoPath);
         return i;
+    }
+
+    @Override
+    public Map findUserInfoById(String user_id) {
+        Map userInfo = userDAO.findUserInfoById(user_id);
+        return userInfo;
+    }
+
+    @Override
+    public int updateUserInfo(UserInfo userinfo) {
+        int i = userDAO.updateUserInfo(userinfo);
+        return i;
+    }
+
+    @Override
+    public List<Map> userAnalysis() {
+        List<Map> list = userDAO.userAnalysis();
+        return list;
     }
 }

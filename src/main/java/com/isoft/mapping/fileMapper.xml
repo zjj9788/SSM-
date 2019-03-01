@@ -5,7 +5,9 @@
 <!--动态sql-->
 <mapper namespace="com.isoft.mapping.File">
    <select id="findUseFile" parameterType="map"  resultType="map">
-       select * from file_inf
+       select file_id,file_size,file_upload_time,file_status,downloadCount, dir_name,file_name,file_type,
+       CONCAT(dir_path,dir_name) as file_path
+       FROM file_inf INNER JOIN dir_inf on file_inf.file_dir_id=dir_inf.dir_id
         <where>
             <if test="user_id!=null">
             and  file_upload_user_id=#{user_id}
@@ -48,4 +50,17 @@
         </foreach>
         )
     </delete>
+    <update id="updateDownloadCount" parameterType="int">
+        update file_inf set downloadCount=downloadCount+1 where file_id=#{file_id}
+    </update>
+
+<!--    <update id="updateUploadFileInfo" parameterType="map" >
+        update file_inf set file_name=#{file_name},file_size=#{file_size},
+        file_type=#{file_type},file_upload_time=now(),
+        file_status=0,file_dir_id=#{file_dir_id},downloadCount=0
+        where file_upload_user_id
+    </update>-->
+    <insert id="insertUploadFileInfo" parameterType="map">
+        insert into file_inf values(null,#{file_name},#{file_size},#{file_type},now(),0,#{file_dir_id},#{user_id},0)
+    </insert>
 </mapper>

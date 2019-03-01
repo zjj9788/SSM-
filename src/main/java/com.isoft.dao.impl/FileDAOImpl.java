@@ -47,9 +47,7 @@ public class FileDAOImpl implements IFileDAO {
         SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
         String sql = "com.isoft.mapping.File.deleteFileById";
         try {
-         //   System.out.println(list);
             int delete = sqlSession.delete(sql, list);
-           // System.out.println(delete + "条记录");
             sqlSession.commit(true);
             return delete;
         }catch (Exception e){
@@ -64,6 +62,25 @@ public class FileDAOImpl implements IFileDAO {
         System.out.println(map);
         String sql = "com.isoft.mapping.File.updateFileStatus";
         int update = sqlSession.update(sql, map);
+        sqlSession.commit();
+        return update;
+    }
+
+    @Override
+    public int updateDownloadCount(int file_id) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.File.updateDownloadCount";
+        int update = sqlSession.update(sql, file_id);
+        sqlSession.commit();
+        return update;
+    }
+
+    @Override
+    public int insertUploadFileInfo(Map map) {
+        SqlSession sqlSession = sqlSessionFactoryBean.openSession(true);
+        String sql = "com.isoft.mapping.File.insertUploadFileInfo";
+        int update = sqlSession.insert(sql,map);
+        sqlSession.commit();
         return update;
     }
 }

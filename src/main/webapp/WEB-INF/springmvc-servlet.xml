@@ -25,4 +25,16 @@
         <property name="defaultEncoding" value="utf-8"></property>
         <property name="maxUploadSize" value="20971520"></property>
     </bean>
+ <!--   <mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash; 需拦截的地址 &ndash;&gt;
+            &lt;!&ndash; 一级目录 &ndash;&gt;
+            <mvc:mapping path="/**" />
+
+            &lt;!&ndash; 需排除拦截的地址 &ndash;&gt;
+            <mvc:exclude-mapping path="/login.html"/>
+
+            <bean class="com.isoft.intercepter.LoginInterCepter"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
 </beans>
