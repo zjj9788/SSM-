@@ -37,8 +37,8 @@
                         }
                     });
 
-                }, function () {
-                    window.location.reload();//刷新当前页面
+                }, function (data) {
+                  layer.msg("取消");
 
                 }
             );
@@ -209,8 +209,7 @@
                             layer.msg("请选择一行数据");
                         } else {
                             layer.confirm('是否要真的删除选中数据？', {
-                                btn: ['确定', '取消'], //按钮
-                                btnAlign: 'c'  //按钮居中显示
+                                btn: ['确定', '取消']
                             }, function () {
                                 // layer.msg(JSON.stringify(arr), {icon: 1});
                                 $.ajax({

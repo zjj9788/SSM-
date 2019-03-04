@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 @Controller
@@ -20,20 +23,21 @@ import java.util.*;
 public class UserAction {
     @Autowired
     IUserService userServiceImpl;
+
     @RequestMapping(value = "/userAnalysis.do", method = RequestMethod.GET)
     @ResponseBody
     public Map userAnalysis() {
         List<Map> list = userServiceImpl.userAnalysis();
-        List<String> statusList=new ArrayList<String>();
-        List<Integer> countList=new ArrayList<Integer>();
-        for (Map map:list ) {
+        List<String> statusList = new ArrayList<String>();
+        List<Integer> countList = new ArrayList<Integer>();
+        for (Map map : list) {
             //[{"aaa":32,'count':43},{"bb":43,'count':54}]
-           statusList.add(map.get("status").toString());
+            statusList.add(map.get("status").toString());
             countList.add(Integer.parseInt(map.get("count").toString()));
         }
-        Map map=new HashMap();
-        map.put("status",statusList);
-        map.put("count",countList);
+        Map map = new HashMap();
+        map.put("status", statusList);
+        map.put("count", countList);
         return map;
     }
 
@@ -55,7 +59,9 @@ public class UserAction {
             return i;
         }
 
-    }    @RequestMapping(value = "/updateInfo.do", method = RequestMethod.POST)
+    }
+
+    @RequestMapping(value = "/updateInfo.do", method = RequestMethod.POST)
     @ResponseBody
     public int updateUserInfo(UserInfo userinfo) {
         int i = userServiceImpl.updateUserInfo(userinfo);
@@ -108,9 +114,16 @@ public class UserAction {
         else
             return 1;
     }
+
     @RequestMapping(value = "/toLogin.do")
-    public String forwardLogin(){
-        System.out.println("index.html");
-        return "index.html";
+    @ResponseBody
+    public String forwardLogin(HttpServletResponse response) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<script type='text/javascript' charset='UTF-8'>");
+        builder.append("alert('您还未登录，请先登录.');");
+        builder.append("window.top.location.href='");
+        builder.append("/login.html'</script>");
+
+        return builder.toString();
     }
 }

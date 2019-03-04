@@ -13,6 +13,9 @@
             var uname = sessionStorage.getItem("uname");
             var user_id = sessionStorage.getItem("user_id");
             var photo = sessionStorage.getItem("photo");
+            if(user_id==null){
+                window.location.href="index.html";
+            }
             //    alert(photo);
             $("#userPhoto").attr("src", photo);//这句话是给img标记src属性赋值
             var str = "<div  align=\"center\">欢迎<label style='color: red'>" + uname + "</label>登录系统</div>";
