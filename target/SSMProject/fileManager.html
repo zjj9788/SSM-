@@ -75,7 +75,9 @@
         }
 
         $(function () {
-            getUserFile(1, 10);
+            sessionStorage.setItem("fileType", "all");
+            sessionStorage.setItem("isShare", -1);
+            getUserFile(1,10);
             // alert( sessionStorage.getItem("user_id"));
             layui.table.on("edit(filetable)", function (rs) {
                 $.ajax({

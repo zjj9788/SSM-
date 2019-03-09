@@ -4,13 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.isoft.pojo.UserInfo;
 import com.isoft.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -21,6 +27,12 @@ import java.util.*;
 @Scope("singleton")
 @RequestMapping("/user")
 public class UserAction {
+    @Value("${smtp}")
+    String smtp;
+    @Value("${from}")
+    String from;
+    @Value("${authCode}")
+    String authCode;
     @Autowired
     IUserService userServiceImpl;
 
@@ -126,4 +138,26 @@ public class UserAction {
 
         return builder.toString();
     }
+    @RequestMapping(value = "/findUserPwd.do")
+    @ResponseBody
+    public String findUserPwd(HttpServletRequest request,String username,String email) throws MessagingException {
+        //根据用户名找到用户邮箱
+        JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
+        System.out.println("mail test");
+        javaMailSender.setHost(smtp);
+        javaMailSender.setUsername(from);
+        javaMailSender.setPassword(authCode);//授权码
+        System.out.println(authCode);
+        MimeMessage mimeMessage=javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true,"utf-8");
+        mimeMessageHelper.setTo("511167169@qq.com");
+        mimeMessageHelper.setFrom(from);
+        mimeMessage.setSubject("找回密码邮件");
+        String hrefString=request.getScheme()+"://"+request.getServerName()+":"+request.getLocalPort()
+                +"/"+request.getServletContext().getContextPath()+"/user/getUserPwd.do?uname="+username;
+        mimeMessage.setText("密码找回功能，单击下面链接修改新密码："+hrefString);
+        javaMailSender.send(mimeMessage);
+        return "ok";
+    }
+
 }

@@ -8,7 +8,29 @@
 
 
     <script>
+ function findBackUserPwd() {
+     var uname = $("#re_uname").val();
+     if (uname.length == 0) {
+         layer.tips("用户名不能为空!", "#re_uname", {
+             tips: [2, "#000000"],
+             time: 2000
+         });
+         return;
+     }
+     $.ajax({
+         url:"user/findUserPwd.do",
+         data:{"username":uname},
+         method:"post",
+         success:function(data){
 
+         },
+         error:function () {
+             layer.msg("请求服务器失败，请重试!", {
+                 time: 2000
+             });
+         }
+     });
+ }
         function registerValidate() {
             var uname = $("#re_uname").val();
             if (uname.length == 0) {
